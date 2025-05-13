@@ -1,39 +1,41 @@
-import { Sequelize } from 'sequelize';
-import { fileURLToPath } from 'url';
-import path from 'path';
 import fs from 'fs';
-
-// Importa a configuração do Sequelize
+import path from 'path';
+import { Sequelize } from 'sequelize';
 import sequelize from '../config/database';
+import Order from './orders';
+import Product from './product';
+import Restaurant from './restaurant';
+import Buyer from './buyer';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Define a interface do db para armazenar os modelos e a instância do Sequelize
-const db: {
-    [key: string]: any;
-    sequelize: Sequelize;
-    Sequelize: typeof Sequelize;
-} = {
-    sequelize,
-    Sequelize,
-};
-
-// Carrega todos os arquivos de modelos (exceto o próprio index.ts)
-const files = fs
-    .readdirSync(__dirname)
-    .filter(file => file !== 'index.ts' && file.endsWith('.ts'));
-
-// Carrega os modelos dinamicamente usando importação dinâmica (ESM)
-for (const file of files) {
-    const model = await import(`./${file}`);
-    const modelInstance = model.default(sequelize);
-    db[modelInstance.name] = modelInstance;
+interface Db {
+  [key: string]: any;
+  sequelize: Sequelize;
+  Sequelize: typeof Sequelize;
 }
 
-// Definindo os relacionamentos entre os modelos
-db.Order.belongsTo(db.Product, { foreignKey: 'productId', as: 'product' });
-db.Order.belongsTo(db.Restaurant, { foreignKey: 'restaurantId', as: 'restaurant' });
-db.Order.belongsTo(db.Buyer, { foreignKey: 'buyerId', as: 'buyer' });
+const db: Db = {
+  sequelize,
+  Sequelize,
+  Order,
+  Product,
+  Restaurant,
+  Buyer,
+};
+
+const modelFiles = fs
+  .readdirSync(__dirname)
+  .filter(file => file !== 'index.ts' && file.endsWith('.ts'));
+
+for (const file of modelFiles) {
+  const modelModule = require(path.join(__dirname, file));
+  const model = modelModule.default(sequelize);
+  db[model.name] = model;
+}
+
+// if (db.Order && db.Product && db.Restaurant && db.Buyer) {
+//   db.Order.belongsTo(db.Product, { foreignKey: 'product_id', as: 'product' });
+//   db.Order.belongsTo(db.Restaurant, { foreignKey: 'restaurant_id', as: 'restaurant' });
+//   db.Order.belongsTo(db.Buyer, { foreignKey: 'buyer_id', as: 'buyer' });
+// }
 
 export { db };

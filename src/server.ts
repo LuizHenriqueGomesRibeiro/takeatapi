@@ -1,11 +1,19 @@
-import app from './app';
+import 'dotenv/config';
+import express from 'express';
 import { db } from './models';
 
-const PORT = process.env.PORT;
+const app = express();
+app.use(express.json());
 
-db.sequelize.sync({ force: false }).then(() => {
-  console.log('Banco sincronizado');
-  app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
+const PORT = process.env.PORT || 3000;
+
+db.sequelize.sync({ force: false })
+  .then(() => {
+    console.log('🟢 Tabelas criadas/sincronizadas com sucesso');
+    app.listen(PORT, () => {
+      console.log(`🚀 Servidor rodando na porta ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('❌ Erro ao sincronizar tabelas:', err);
   });
-}).catch(console.error);
