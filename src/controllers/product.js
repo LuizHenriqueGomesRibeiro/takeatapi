@@ -2,7 +2,7 @@ const { Product } = require('../models');
 
 exports.createProduct = async (req, res) => {
     try {
-        const { name, value } = req.body;
+        const { name, value, description } = req.body;
         const restaurant_id = req.restaurant.id;
 
         if (!name || value == null) {
@@ -23,6 +23,7 @@ exports.createProduct = async (req, res) => {
             name,
             value,
             restaurant_id,
+            description: description || null,
             created_at: new Date()
         });
 

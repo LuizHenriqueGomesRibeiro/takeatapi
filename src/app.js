@@ -9,6 +9,6 @@ const app = express();
 app.use(express.json());
 app.use('/public', public);
 app.use(auth);
-app.use('/private', private);
+app.use('/restaurant', private);
 
 module.exports = app;
