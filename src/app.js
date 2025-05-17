@@ -1,9 +1,11 @@
 const express = require("express");
-const routes = require("./routes");
+const public = require("./routes/public");
+const private = require("./routes/private");
 
 const app = express();
 
 app.use(express.json());
-app.use(routes);
+app.use('/public', public);
+app.use('/private', private);
 
 module.exports = app;
