@@ -6,7 +6,7 @@ exports.createOrder = async (req, res) => {
         const restaurant_id = req.restaurant.id;
 
         if (!phone) {
-            return res.status(400).json({ error: 'Informe o nome do destinatário.' })
+            return res.status(400).json({ error: 'Informe o telefone do destinatário.' })
         }
 
         if (!amount || !product_id) {
@@ -30,7 +30,7 @@ exports.createOrder = async (req, res) => {
                 created_at: new Date()
             });
         } else {
-            return res.status(400).json({ error: 'Já há um pedido corrente para este destinatário' });
+            return res.status(400).json({ error: 'Já há um pedido corrente para este destinatário.' });
         }
 
         const restaurant = await Restaurant.findByPk(restaurant_id);
