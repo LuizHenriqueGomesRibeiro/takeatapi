@@ -5,8 +5,12 @@ exports.createOrder = async (req, res) => {
         const { amount, product_id, phone, name } = req.body;
         const restaurant_id = req.restaurant.id;
 
-        if (!amount || !product_id || !phone) {
-            return res.status(400).json({ error: 'amount, product_id e phone são obrigatórios.' });
+        if (!phone) {
+            return res.status(400).json({ error: 'Informe o nome do destinatário.' })
+        }
+
+        if (!amount || !product_id) {
+            return res.status(400).json({ error: 'amount e product_id são obrigatórios.' });
         }
 
         const product = await Product.findOne({
@@ -25,6 +29,8 @@ exports.createOrder = async (req, res) => {
                 phone,
                 created_at: new Date()
             });
+        } else {
+            return res.status(400).json({ error: 'Já há um pedido corrente para este destinatário' });
         }
 
         const restaurant = await Restaurant.findByPk(restaurant_id);

@@ -1,8 +1,8 @@
+const { createRestaurant, loginRestaurant, getRestaurants } = require("../controllers/restaurant");
 const { Router } = require("express");
-const { createRestaurant, loginRestaurant } = require("../controllers/restaurant");
-
 const routes = Router();
 
+routes.get('/restaurants', getRestaurants);
 routes.post('/restaurants', createRestaurant);
 routes.post('/login', loginRestaurant);
 

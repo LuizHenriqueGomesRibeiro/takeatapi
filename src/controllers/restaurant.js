@@ -75,3 +75,18 @@ exports.loginRestaurant = async (req, res) => {
   }
 }
 
+exports.getRestaurants = async (req, res) => {
+  try {
+    const restaurants = await Restaurant.findAll({
+      where: { canceled_at: null },
+      attributes: {
+        exclude: ['password']
+      },
+      order: [['created_at', 'DESC']]
+    });
+
+    return res.json(restaurants);
+  } catch (err) {
+    return res.status(500).json({ error: 'Erro interno ao buscar restaurantes.' });
+  }
+};
