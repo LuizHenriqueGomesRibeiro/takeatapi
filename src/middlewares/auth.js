@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { Restaurant } = require('../models');
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = "021ec2h8e8h2ce2h8mh2ce2eg72e2ecg2egc2beg27ceg2ec72gneiwd";
 
 module.exports = async (req, res, next) => {
     const authHeader = req.headers.authorization;

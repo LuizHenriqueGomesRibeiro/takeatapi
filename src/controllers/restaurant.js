@@ -3,7 +3,7 @@ const { Op } = require('sequelize');
 
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = "021ec2h8e8h2ce2h8mh2ce2eg72e2ecg2egc2beg27ceg2ec72gneiwd";
 
 exports.createRestaurant = async (req, res) => {
   try {
